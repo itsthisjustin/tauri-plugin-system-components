@@ -168,8 +168,10 @@ final class AdaptiveTabBarController: UIViewController, UITabBarControllerDelega
     private func publishInsets() {
         guard !view.isHidden,
               let nav = tabs.selectedViewController as? UINavigationController,
-              let content = nav.topViewController, content.isViewLoaded else { return }
-        let frame = content.view.convert(content.view.safeAreaLayoutGuide.layoutFrame, to: view)
+              nav.isViewLoaded else { return }
+        // The navigation controller's own safe area: it counts the tab bar or rail, but
+        // not the navigation bar, whose buttons float over the page.
+        let frame = nav.view.convert(nav.view.safeAreaLayoutGuide.layoutFrame, to: view)
         let insets = [
             "top": max(0, frame.minY), "left": max(0, frame.minX),
             "bottom": max(0, view.bounds.maxY - frame.maxY),
